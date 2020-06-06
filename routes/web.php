@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::prefix('carrinho')->name('carrinho.')->group(function(){
     Route::post('adicionar', 'CarrinhoController@adicionar')->name('adicionar');
     Route::get('/', 'CarrinhoController@index')->name('carrinho');
+    Route::get('remover/{slug}', 'CarrinhoController@remover')->name('remover');
+    Route::get('cancelar', 'CarrinhoController@cancelar')->name('cancelar');
 });
 
 Auth::routes();

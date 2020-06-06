@@ -5,6 +5,9 @@
         <h2>Carrinho de compras</h2>
     </div>
     <hr>
+    @if($carrinho)
+        
+ 
     <table class="table table-striped table-dark mt-5">
         <thead>
             <tr>
@@ -32,7 +35,7 @@
                         $total+= $subtotal;    
                     @endphp
                     <td>
-                        <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i>Remover</button>
+                        <a href="{{ route('carrinho.remover', ['slug' => $c['slug']]) }}" type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i>Remover</a>
                     </td>
                 </tr>
             @endforeach
@@ -40,10 +43,19 @@
                 <td colspan="3">Total:</td>
                 <td colspan="2">R$ {{ number_format($total, 2, ',', '.') }}</td>
             </tr>
-    
 
         </tbody>
     </table>
+    <hr>
+    <div class="col-md-12">
+        <a href="{{ route('carrinho.cancelar') }}" class="btn btn-danger float-left">Cancelar compra</a>
+        <a href="" class="btn btn-success float-right">Efetuar compra</a>
+    </div>
+    @else
+    <div class="col-12 mt-3">
+        <div class="alert alert-warning">Carrinho vazio</div>
+    </div>
+    @endif
 
 
 @endsection

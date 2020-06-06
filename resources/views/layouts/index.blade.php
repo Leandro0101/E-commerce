@@ -18,7 +18,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-  
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
@@ -29,31 +28,21 @@
           </li>
           <li class="nav-item">
               <a class="nav-link" href="{{ route('admin.categoria.index') }}">Categorias</a>
-            </li>
+          </li>
         </ul>
-        @auth
-        <div class="my-2 my-lg-0">
-          <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="" onclick="event.preventDefault(); document.querySelector('form.logout').submit();">Sair</a>
-                <form action="{{route('logout')}}" class="logout" method="post" style="display:none;">
-                  @csrf
-                </form>
-              </li>
-          </ul>
-      </div>
-      @endauth
-      </div>
-    </nav>
+        @if(session()->has('carrinho'))
+          <span class="badge badge-danger">{{ array_sum(array_column(session('carrinho'), 'quantidade')) }}</span>
+        @endif 
+      <a href="{{ route('carrinho.carrinho') }}"><i class="fa fa-shopping-cart fa-2x"></i></a>  
+      </div>                                
 
+    </nav>
        @auth 
           <div class="container mt-5">          
-              <a class="list-group-item list-group-item-action list-group-item-secondary" id="list-profile-list"><h5><i class="far fa-user"></i> {{ auth()->user()->name }}</h5></a>
-                  
-    
+            <a class="list-group-item list-group-item-action list-group-item-secondary" id="list-profile-list"><h5><i class="far fa-user"></i> {{ auth()->user()->name }}</h5></a>
             <hr class="br-dark">
             <div class="row">
-              <div class="col-6">
+              <div class="col-7">
                 <div class="card bg-white">
                   <div class="row">
                     <div class="col-4">
@@ -73,8 +62,13 @@
                         </div>
                         <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
                           <ul class="list-group list-group-horizontal-lg">  
-                            <li class="list-group-item mt-4"><h5>{{ auth()->user()->name}}</h5></li>
-                            <li class="list-group-item mt-4"><h5>{{ auth()->user()->email}}</h5> </li>
+                            <li class="list-group-item mt-4">{{ auth()->user()->name}}</li>
+                            <li class="list-group-item mt-4">{{ auth()->user()->email}} </li>
+                            <li class="list-group-item mt-4"><a class="btn btn-outline-success btn-sm" href="" onclick="event.preventDefault(); document.querySelector('form.logout').submit();">Sair</a>
+                              <form action="{{route('logout')}}" class="logout" method="post" style="display:none;">
+                                @csrf
+                              </form>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -84,13 +78,13 @@
               </div>
             </div>
           </div>          
-          @endauth
-      
+        @endauth
 
       @include('flash::message')
       <div class="container">
           @yield('content')
       </div>
+  
   
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
