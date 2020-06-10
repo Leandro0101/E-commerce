@@ -1,6 +1,12 @@
 @extends('layouts.index')
 @section('content')
-
+@if(session()->has('cliente'))
+@php 
+  $cliente = session()->get('cliente');
+@endphp
+@endif    
+<div class="row ">
+    <div class="col-5">
     <div class="card mb-3 mt-4" style="width:36rem;">
         <div class="row no-gutters">
             <div class="col-md-5">
@@ -67,5 +73,23 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="col-2"></div>
+
+<div class="col-md-5">
+    <form action="{{ route('comentario.adicionar', ['slug' => $produto->slug ]) }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Envie seu feedback!</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="comentario">Esse é um comentário teste</textarea>
+          </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<hr>
+{{-- <a>{{ $cliente->comentarios()->first()->texto }}</a> --}}
+</div>
+
+</div>
 
 @endsection

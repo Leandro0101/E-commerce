@@ -2,15 +2,13 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Database\Eloquent\Model;
 
-class Produto extends Model
+class Cliente extends Model
 {
     use HasSlug;
-    protected $fillable = ['nome, quantidade, descricao, preco', 'slug'];
-    protected $table = "produtos";
 
     public function getSlugOptions() : SlugOptions
     {
@@ -19,13 +17,14 @@ class Produto extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function fotos()
+    public function foto()
     {
-        return $this->hasMany(ProdutoFoto::class, 'produto', 'id');
+        
+        return $this->hasOne(ClienteFoto::class, 'cliente', 'id');
     }
 
     public function comentarios()
     {
-        return $this->hasMany(Comentario::class, 'produto', 'id');
+        return $this->hasMany(Comentario::class, 'cliente', 'id');
     }
 }

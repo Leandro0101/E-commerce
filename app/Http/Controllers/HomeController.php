@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Produto;
+use App\Comentario;
 use App\ProdutoFoto;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,11 @@ class HomeController extends Controller
 
     public function produto($slug)
     {   
+        $comentario = new Comentario();
         $produto = $this->produto->whereSlug($slug)->first();
+        $comentarios = $produto->comentarios;
+
+        dd($comentarios);
 
         return view('produto', compact('produto'));
     }

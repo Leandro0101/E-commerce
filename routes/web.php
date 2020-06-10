@@ -25,12 +25,26 @@ Route::group(['middleware' => 'auth'], function () {
     });
 });
 
-Route::prefix('carrinho')->name('carrinho.')->group(function(){
+Route::prefix('carrinho')->name('carrinho.')->group(function () {
     Route::post('adicionar', 'CarrinhoController@adicionar')->name('adicionar');
     Route::get('/', 'CarrinhoController@index')->name('carrinho');
     Route::get('remover/{slug}', 'CarrinhoController@remover')->name('remover');
     Route::get('cancelar', 'CarrinhoController@cancelar')->name('cancelar');
 });
+
+Route::prefix('comentario')->name('comentario.')->group(function(){
+    Route::post('adicionar/{slug}', 'ComentarioController@adicionar')->name('adicionar');
+});
+
+Route::prefix('cliente')->name('cliente.')->group(function () {
+    Route::get('criar', 'ClienteController@criar')->name('criar');
+    Route::post('store', 'ClienteController@store')->name('store');
+    Route::get('login', 'ClienteController@login')->name('login');
+    Route::get('autenticacao', 'ClienteController@autenticacao')->name('autenticacao');
+    Route::get('sair', 'ClienteController@sair')->name('sair');
+    Route::get('edit/{id}', 'ClienteController@edit')->name('edit');
+});
+
 
 Auth::routes();
 

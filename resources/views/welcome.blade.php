@@ -27,4 +27,34 @@
 @endif
   @endforeach
 </div>
+
+
+@if (session()->has('cliente'))
+  @php
+      $cliente = session()->get('cliente');    
+    @endphp
+  <div class="toast" style="position: absolute; top: 0; right: 0;" data-delay="15000">
+    <div class="toast-header">
+      <img src="..." class="rounded mr-2" alt="...">
+      <strong class="mr-auto">E-BIJU  </strong>
+      <small>Agora</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      Olá, {{ $cliente['nome'] }}!
+    </div>
+  </div>
+</div>
+@endif
+@endsection
+
+@section('scripts')
+  <script>
+    $(document).ready(function(){
+  $('.toast').toast('show');
+});
+
+</script>
 @endsection
