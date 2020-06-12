@@ -49,6 +49,10 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::get('atualizacaoEspecifica/{cliente}', 'ClienteController@atualizacaoEspecifica')->name('atualizacaoEspecifica');
 });
 
+Route::prefix('checkout')->name('checkout.')->group(function(){
+    Route::get('/', 'CheckoutController@index')->name('index');
+});
+
 
 Auth::routes();
 
