@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Cliente;
 use App\Produto;
-use App\Comentario;
+use App\Categoria;
 use App\ProdutoFoto;
 use Illuminate\Http\Request;
 
@@ -31,18 +32,23 @@ class HomeController extends Controller
     {   
 
         $produtos = $this->produto->limit(8)->orderBy('id', 'desc')->get();
-
-        return view('welcome', compact('produtos'));
+        $categoria = new Categoria();
+        $categorias = $categoria->all();
+        return view('welcome', compact('produtos', 'categorias'));
     }
 
     public function produto($slug)
     {   
-        $comentario = new Comentario();
         $produto = $this->produto->whereSlug($slug)->first();
-        $comentarios = $produto->comentarios;
+        $comentariosRecentes = $produto->comentarios()->limit(5)->orderBy('id', 'desc')->get();
+        
+        return view('produto', compact('produto', 'comentariosRecentes'));
+    }
 
-        dd($comentarios);
-
-        return view('produto', compact('produto'));
+    public function exibirPorCategoria($categoria){
+        $produtos = $this->produto->where('categoria', $categoria)->get();
+        $categoria = new Categoria();
+        $categorias = $categoria->all();
+        return view('welcome', compact('produtos', 'categorias'));
     }
 }

@@ -1,59 +1,87 @@
 @extends('layouts.index')
 @section('content')
-<div class="form col-4">
-<form action="" method="post" enctype="multipart/form-data">
+  {{-- Formulário de cadastro de novo cliente --}}
+  @if(session('erro'))
+      <div class="alert alert-danger" role="alert">
+         {{ session('erro') }}
+      </div>
+  @endif
+  <form action="{{route('cliente.atualizacao', ['id' =>session()->get('cliente')->id])}}" class="needs-validation mt-5" novalidate method="post" enctype="multipart/form-data">
+    @method('PUT')
     @csrf
-    <div class="form-group">
-      <label for="nome">Nome completo</label>
-      <input type="text" class="form-control @error('nome') is-invalid @enderror" name="nome" value="{{ $cliente->nome }}">
-    <input type="hidden" value="asjdkdj">
-
-      @error('nome')
-        <div class="invalid-feedback">
+  {{-- Campo nome --}}
+    <div class="form-row">
+      <div class="col-md-4 mb-3">
+        <input type="text" name="nome" class="form-control @error('nome') is-invalid @enderror" id="validationTooltip03" placeholder="Nome Completo" value="{{ session()->get('cliente')->nome }}">
+        @error('nome')
+          <div class="invalid-tooltip">
             {{ $message }}
+          </div>
+        @enderror
+      </div>
+    </div>
+  {{-- Campo email --}}
+    <div class="form-row mt-4">
+      <div class="col-md-4 mb-3">
+        <input type="text" name="email" class="form-control @error('email') is-invalid @enderror" id="validationTooltip03" placeholder="exemplo@gmail.com" value="{{ session()->get('cliente')->email }}">
+        @error('email')
+          <div class="invalid-tooltip">
+            {{ $message }}
+          </div>
+        @enderror
+      </div>
+    </div>
+    {{-- Campo senha atual --}}
+    <div class="form-row mt-4">
+      <div class="col-md-4 mb-3">
+        <input type="password" name="senhaAtual" class="form-control" id="validationTooltip03" placeholder="Confirme sua senha atual">
+      </div>
+    </div>
+    {{-- Campo senha nova --}}
+    <div class="form-row mt-4">
+      <div class="col-md-4 mb-3">
+        <input type="password" name="senhaNova" class="form-control @error('senhaNova') is-invalid @enderror" id="validationTooltip03" placeholder="Digite sua nova senha (opcional)">
+        @error('senhaNova')
+        <div class="invalid-tooltip">
+          {{ $message }}
         </div>
       @enderror
 
+      </div>
     </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $cliente->email }}">
-
-      
-      @error('email')
-        <div class="invalid-feedback">
-            {{ $message }}
+    {{-- Campo de confirmação da senha --}}
+    <div class="form-row mt-4">
+      <div class="col-md-4 mb-3">
+        <input type="password" name="confSenhaNova" class="form-control @error('confSenhaNova') is-invalid @enderror" id="validationTooltip03" placeholder="confirme sua nova senha (opcional)">
+        @error('confSenhaNova')
+        <div class="invalid-tooltip">
+          {{ $message }}
         </div>
       @enderror
 
+      </div>
     </div>
-    <div class="form-group">
-      <label for="senha">Senha</label>
-      <input type="password" class="form-control @error('senha') is-invalid @enderror" name="senha" value="{{ old('senha') }}">
+    {{-- Campo de colocar a foto do perfil --}}
+    <div class="form-row mt-4">
+      <div class="col-md-4 mb-3">
+        <label>Foto de perfil</label>
+        @if(isset(session()->get('cliente')->foto()->first()->path))
+        <a href="{{ route('cliente.removerFoto', ['cliente' => session()->get('cliente')]) }}" class="btn btn-danger">Remover foto</a>
+        <img src="{{ asset('storage/'.session()->get('cliente')->foto()->first()->path) }}" alt="" width="50" style="border-radius: 100%">
+        @else
+        <div class="alert alert-warning" role="alert">
+          Perfil sem foto
+        </div>
+        @endif
+        <input type="file" name="fotoCliente" class="form-control @error('fotoCliente') is-invalid @enderror" id="validationTooltip03">
+        @error('fotoCliente')
+        <div class="invalid-tooltip">
+          {{ $message }}
+        </div>
+      @enderror
 
-      
-      @error('senha')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-      @enderror
+      </div>
     </div>
-    <div class="form-group">
-        <label for="confSenha">Confirme sua senha</label>
-        <input type="password" class="form-control @error('confSenha') is-invalid @enderror" name="confSenha" value="{{ old('confSenha') }}">
-        
-        @error('confSenha')
-        <div class="invalid-feedback">
-            {{ $message }}
-        </div>
-      @enderror
-    </div>
-    <div class="form-group">
-      <label>Imagem de perfil</label>
-      <input type="file" name="fotosCliente[]" class="form-control-file">
-    </div>
-    <button type="submit" class="btn btn-primary">cadastrar</button>
+    <button class="btn btn-primary mt-3" type="submit">Cadastrar</button>
   </form>
-</div>
-
 @endsection

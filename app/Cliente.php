@@ -8,6 +8,8 @@ use Spatie\Sluggable\SlugOptions;
 
 class Cliente extends Model
 {
+    protected $fillable = ['nome', 'senha', 'email'];
+
     use HasSlug;
 
     public function getSlugOptions() : SlugOptions

@@ -7,7 +7,7 @@
   {{-- Campo nome --}}
     <div class="form-row">
       <div class="col-md-4 mb-3">
-        <input type="email" name="nome" class="form-control @error('nome') is-invalid @enderror" id="validationTooltip03" placeholder="Nome Completo" value="{{ old('nome') }}">
+        <input type="text" name="nome" class="form-control @error('nome') is-invalid @enderror" id="validationTooltip03" placeholder="Nome Completo" value="{{ old('nome') }}">
 
         @error('nome')
           <div class="invalid-tooltip">

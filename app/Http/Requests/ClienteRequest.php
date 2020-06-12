@@ -25,7 +25,7 @@ class ClienteRequest extends FormRequest
     {
         return [
             'nome'          => 'required|max:45',
-            'email'         => 'required|max:45|unique:clientes,email',
+            'email'         => 'required|max:45|unique:clientes,email|email',
             'senha'         => 'required|min:8',
             'confSenha'     => 'same:senha',
             'fotoCliente'   => 'image'
@@ -40,7 +40,8 @@ class ClienteRequest extends FormRequest
             'min'      => 'O campo :attribute aceita no mínimo :min caracteres',
             'unique'   => ':attribute já cadastrado',
             'same'     => 'As senhas não são iguais',
-            'image'    => 'Imagem inválida'
+            'image'    => 'Imagem inválida',
+            'email'    => 'Email inválido'
         ];
     }
 }

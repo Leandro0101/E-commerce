@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/categoria/{categoria}', 'HomeController@exibirPorCategoria')->name('exibirPorCategoria');
 Route::get('produto/{slug}', 'HomeController@produto')->name('produto');
 Route::group(['middleware' => 'auth'], function () {
     Route::view('admin', 'layouts.index');
@@ -43,6 +44,9 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::get('autenticacao', 'ClienteController@autenticacao')->name('autenticacao');
     Route::get('sair', 'ClienteController@sair')->name('sair');
     Route::get('edit/{id}', 'ClienteController@edit')->name('edit');
+    Route::put('atualizacao/{id}', 'ClienteController@atualizacao')->name('atualizacao');
+    Route::get('removerFoto/{cliente}', 'ClienteController@removerFoto')->name('removerFoto');
+    Route::get('atualizacaoEspecifica/{cliente}', 'ClienteController@atualizacaoEspecifica')->name('atualizacaoEspecifica');
 });
 
 

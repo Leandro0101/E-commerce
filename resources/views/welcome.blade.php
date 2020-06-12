@@ -33,7 +33,7 @@
   @php
       $cliente = session()->get('cliente');    
     @endphp
-  <div class="toast" style="position: absolute; top: 0; right: 0;" data-delay="15000">
+  <div class="toast" style="position: absolute; top: 0; right: 0;" data-delay="3000">
     <div class="toast-header">
       <img src="..." class="rounded mr-2" alt="...">
       <strong class="mr-auto">E-BIJU  </strong>
@@ -53,8 +53,8 @@
 @section('scripts')
   <script>
     $(document).ready(function(){
-  $('.toast').toast('show');
-});
+      $('.toast').toast('show');
+    });
 
 </script>
 @endsection
