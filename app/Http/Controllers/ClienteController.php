@@ -152,8 +152,13 @@ class ClienteController extends Controller
         } else {
             session()->put('cliente', $cliente);
 
+
             $login['success'] = true;
-            //$login['message'] = 'Estão corretos';
+            if(session()->get('carrinho')){
+                $login['carrinho']=true;
+               }else{
+                   $login['carrinho']=false;
+               }
             echo json_encode($login);
 
             return;

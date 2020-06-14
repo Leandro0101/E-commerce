@@ -1,5 +1,7 @@
 @extends('layouts.index')
 @section('content')
+
+@if(count($produtos)>=1)
 <div class="row mt-3">
   @foreach ($produtos as $key => $produto )
 <div class="col">
@@ -27,7 +29,9 @@
 @endif
   @endforeach
 </div>
-
+@else
+<h1>Produto não encontrado</h1>
+@endif
 
 @if (session()->has('cliente'))
   @php

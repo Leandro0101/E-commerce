@@ -17,6 +17,10 @@ class CarrinhoController extends Controller
     public function adicionar(Request $request){
         $produto = $request->get('produto');
 
+        if($produto['quantidade']<=0){
+            return redirect()->route('produto', ['slug' => $produto['slug']]);
+        }
+
         if(session()->has('carrinho')){
 
             $produtos = session()->get('carrinho');

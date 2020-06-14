@@ -32,8 +32,13 @@
           data: $(this).serialize(),
           dataType: 'json',
           success: function(response){
-            if(response.success === true){
-              window.location.href = "{{ route('home') }}";
+            if(response.success === true){              
+              if(response.carrinho===true){
+                window.location.href = "{{ route('checkout.index') }}";  
+              }else{
+                window.location.href = "{{ route('home') }}";
+              }
+              
             }else{
               $('.messageBox').removeClass('d-none').html(response.message);
             }

@@ -33,11 +33,13 @@
     <div class="form-group">
       <label>Categorias</label>
 
-      <select name="categoria" id="" class="form-control">
+      <select name="categoria" id="" class="form-control @error('categoria') is-invalid @enderror">
           @foreach($categorias as $categoria)
           <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
           @endforeach
       </select>
+
+      @error('categoria') <div class="invalid-feedback"> {{ $message }} </div> @enderror
 
     </div>
 

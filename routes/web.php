@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/categoria/{categoria}', 'HomeController@exibirPorCategoria')->name('exibirPorCategoria');
 Route::get('produto/{slug}', 'HomeController@produto')->name('produto');
+Route::get('busca', 'HomeController@buscaDeProdutos')->name('busca');
 Route::group(['middleware' => 'auth'], function () {
     Route::view('admin', 'layouts.index');
     Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function () {
@@ -33,6 +35,12 @@ Route::prefix('carrinho')->name('carrinho.')->group(function () {
     Route::get('cancelar', 'CarrinhoController@cancelar')->name('cancelar');
 });
 
+Route::prefix('checkout')->name('checkout.')->group(function(){
+    Route::get('/', 'CheckoutController@index')->name('index');
+    Route::post('/proccess', 'CheckoutController@proccess')->name('proccess');
+});
+
+
 Route::prefix('comentario')->name('comentario.')->group(function(){
     Route::post('adicionar/{slug}', 'ComentarioController@adicionar')->name('adicionar');
 });
@@ -48,11 +56,6 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::get('removerFoto/{cliente}', 'ClienteController@removerFoto')->name('removerFoto');
     Route::get('atualizacaoEspecifica/{cliente}', 'ClienteController@atualizacaoEspecifica')->name('atualizacaoEspecifica');
 });
-
-Route::prefix('checkout')->name('checkout.')->group(function(){
-    Route::get('/', 'CheckoutController@index')->name('index');
-});
-
 
 Auth::routes();
 

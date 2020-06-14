@@ -29,4 +29,9 @@ class Cliente extends Model
     {
         return $this->hasMany(Comentario::class, 'cliente', 'id');
     }
+
+    public function pedidos()
+    {
+        return $this->hasMany(ClientePedido::class, 'cliente', 'id');
+    }
 }

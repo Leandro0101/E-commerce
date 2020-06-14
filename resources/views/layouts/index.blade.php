@@ -15,7 +15,7 @@ use App\ClienteFoto;
     <script src="https://kit.fontawesome.com/d96ecac57c.js" crossorigin="anonymous"></script>
 
     <title>E-BIJU</title>
-
+    @yield('stylesheet')
   </head>
   <body>
     @if(session()->has('cliente'))
@@ -143,6 +143,10 @@ use App\ClienteFoto;
        </div>
      </div>          
     @endauth
+    <form action="{{ route('busca') }}" class="form-inline my-2 my-lg-0" method="GET">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="pesquisa_produt">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
 
   {{-- Se houver uma sessão do cliente, ou seja, se ele estiver logado, o modal de configurações poderá ser chamado --}}
   <!-- Modal -->

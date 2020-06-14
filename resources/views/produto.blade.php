@@ -99,6 +99,7 @@
       </div>
     </form>
     <hr>
+    @if($comentariosRecentes->count())
     @foreach ($comentariosRecentes as $comentario)
       <div class="toas" role="alert">
         <div class="toast-header">
@@ -121,6 +122,9 @@
         </div>
       </div>
     @endforeach
+    @else
+    <h5>Não há comentários para esse produto, seja o(a) primeiro(a) a comentar algo!</h5>
+    @endif
     <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#exampleModal"> Ver mais comentários </button>
   </div>
 

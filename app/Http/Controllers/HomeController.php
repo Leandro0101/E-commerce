@@ -41,8 +41,8 @@ class HomeController extends Controller
     {   
         $produto = $this->produto->whereSlug($slug)->first();
         $comentariosRecentes = $produto->comentarios()->limit(5)->orderBy('id', 'desc')->get();
-        
-        return view('produto', compact('produto', 'comentariosRecentes'));
+        $cliente = new Cliente();
+        return view('produto', compact('produto', 'comentariosRecentes', 'cliente'));
     }
 
     public function exibirPorCategoria($categoria){
@@ -51,4 +51,16 @@ class HomeController extends Controller
         $categorias = $categoria->all();
         return view('welcome', compact('produtos', 'categorias'));
     }
+
+    public function buscaDeProdutos(Request $request){
+
+        $dados = $request->all();
+
+        $produtos = $this->produto->where('nome', 'like', '%'.$dados['pesquisa_produt'].'%')->get();
+        $categoria = new Categoria();
+        $categorias = $categoria->all();
+        return view('welcome', compact('produtos', 'categorias'));
+
+    }
+
 }

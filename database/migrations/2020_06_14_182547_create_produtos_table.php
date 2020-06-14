@@ -17,11 +17,13 @@ class CreateProdutosTable extends Migration
             $table->id();
             $table->string('nome', 40);
             $table->integer('quantidade')->nullable();
+            $table->unsignedBigInteger('categoria');
             $table->string('descricao', 70);
             $table->decimal('preco');
             $table->string('slug');
             $table->integer('avaliacao')->nullable();
             $table->timestamps();
+            $table->foreign('categoria')->references('id')->on('categorias')->onDelete('cascade');
         });
     }
 
