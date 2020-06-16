@@ -21,6 +21,16 @@
       <hr>
       <h5 class="" align="center">R$ {{ number_format($produto->preco, 2, ',', '.') }}</h5>
       <a href="{{ route('produto', ['slug'=>$produto->slug]) }}" class="btn btn-success ml-5 btn-sm">Ver produto</a>
+      @if($produto->favoritos()->count())
+      @if(request()->is('favoritos'))
+      <i class="fas fa-crown"></i>
+      <form action="{{ route('cliente.removerFavorito', ['id'=>$produto->id]) }}" method="POST">
+        @method('delete')
+        @csrf
+        <button type="submit" class="btn btn-danger ml-5 btn-sm">Remover dos meus favoritos</button>
+      </form>
+      @endif
+      @endif
     </div>
   </div>
 </div>

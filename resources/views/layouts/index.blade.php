@@ -22,9 +22,11 @@ use App\ClienteFoto;
       @php 
         $cliente = session()->get('cliente');
       @endphp
-    @endif    
+    @endif
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       {{-- Essa rota volta para essa mesma página --}}
+      {{-- Aparece sempre --}}
       <a class="navbar-brand" href="{{ route('home') }}">E-BIJU</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -44,16 +46,17 @@ use App\ClienteFoto;
           @endif
           @endforeach
           @endif
-          {{-- Se o adm existir, irá aparecer no navbar as opções para navegar pelas views de produtos e categorias --}}
-          @auth
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.produto.index') }}">Produtos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.categoria.index') }}">Categorias</a>
-            </li>
-          @endauth
+          {{-- Não aparece sempre --}}
           {{-- Se não existe a sessão cliente, ou seja, se o cliente não está logado, irá aparecer as opções para ir para a view de criar uma conta ou fazer o login --}}
+          <div class="nav-item">
+            <form action="{{ route('busca') }}" class="form-inline my-2 my-lg-0" method="GET">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="pesquisa_produt">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              
+            </form>
+          </div>
+          @guest
+
           @if(!session()->get('cliente'))
             <li class="nav-item">
               <a class="nav-link" href="{{ route('cliente.criar') }}"><i class="fas fa-user-plus"></i>Registro</a>
@@ -77,20 +80,25 @@ use App\ClienteFoto;
             </div>
           </li>
           @endif
+          @endguest
 
+          @if(session()->has('cliente'))
             <div class="d-flex">
               <div class="dropdown mr-1">
                 <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
                   <i class="far fa-user"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                  <a class="dropdown-item" href="{{ route('favoritos') }}"><i class="fas fa-users-cog">Favoritos</i></a>
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal_config"><i class="fas fa-users-cog">Configurações </i></a>
                   <a class="dropdown-item" href="{{ route('cliente.sair') }}"><i class="fas fa-door-open">Sair</i></a>
                 </div>
               </div>
             </div>
+            @endif
           @endif
         </ul>
+        <a href="{{ route('mais_vendidos') }}">Mais vendidos</a>
         {{-- Se houver a sessão do carrinho, ou seja, houver algum item no carrinho, o contador de itens irá incrementar a quantidade de itens no carrinho --}}
         @if(session()->has('carrinho'))
           <span class="badge badge-danger">{{ array_sum(array_column(session('carrinho'), 'quantidade')) }}</span>
@@ -143,10 +151,6 @@ use App\ClienteFoto;
        </div>
      </div>          
     @endauth
-    <form action="{{ route('busca') }}" class="form-inline my-2 my-lg-0" method="GET">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="pesquisa_produt">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
 
   {{-- Se houver uma sessão do cliente, ou seja, se ele estiver logado, o modal de configurações poderá ser chamado --}}
   <!-- Modal -->

@@ -161,4 +161,17 @@ class ProdutoController extends Controller
 
     }
 
+    public function descontarQtdEstoque(){
+        $produtos = session()->get('carrinho');
+
+        foreach($produtos as $produto){
+            $this->produto = $this->produto->whereSlug($produto['slug'])->first();
+            $quantidade_comprada = $produto['quantidade'];
+            $quantidade_atual = $this->produto->quantidade;
+            $nova_quantidade = $quantidade_atual-$quantidade_comprada;
+            $this->produto->where('slug', $produto['slug'])->update(['quantidade' => $nova_quantidade]);
+        }
+        return;
+    }
+
 }

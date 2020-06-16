@@ -18,6 +18,8 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/categoria/{categoria}', 'HomeController@exibirPorCategoria')->name('exibirPorCategoria');
 Route::get('produto/{slug}', 'HomeController@produto')->name('produto');
 Route::get('busca', 'HomeController@buscaDeProdutos')->name('busca');
+Route::get('mais_vendidos', 'HomeController@exibicaoProdutosMaisVendidos')->name('mais_vendidos');
+Route::get('favoritos', 'HomeController@favoritos')->name('favoritos');
 Route::group(['middleware' => 'auth'], function () {
     Route::view('admin', 'layouts.index');
     Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function () {
@@ -55,6 +57,8 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::put('atualizacao/{id}', 'ClienteController@atualizacao')->name('atualizacao');
     Route::get('removerFoto/{cliente}', 'ClienteController@removerFoto')->name('removerFoto');
     Route::get('atualizacaoEspecifica/{cliente}', 'ClienteController@atualizacaoEspecifica')->name('atualizacaoEspecifica');
+    Route::post('favoritar/{id}', 'ClienteController@favoritar')->name('favoritar');
+    Route::delete('removerFavorito/{id}', 'ClienteController@removerFavorito')->name('removerFavorito');
 });
 
 Auth::routes();

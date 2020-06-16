@@ -28,4 +28,11 @@ class Produto extends Model
     {
         return $this->hasMany(Comentario::class, 'produto', 'id');
     }
+
+    public function favoritos()
+    {
+        return $this->belongsToMany(Cliente::class, 'favoritos', 'produto', 'cliente');
+    }
+
+
 }

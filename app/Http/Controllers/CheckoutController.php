@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\admin\ProdutoController;
 
 class CheckoutController extends Controller
 {
@@ -121,11 +123,14 @@ class CheckoutController extends Controller
 
         // Set the Payment Mode for this payment request
         $creditCard->setMode('DEFAULT');
-
         $result = $creditCard->register(
             \PagSeguro\Configuration\Configure::getAccountCredentials()
         );
 
+        $home_controll = new HomeController();
+        $produto_controller = new ProdutoController();
+        $produto_controller->descontarQtdEstoque();
+        $home_controll->incrementarQuantidadeVendidaProduto();
     
     }
 

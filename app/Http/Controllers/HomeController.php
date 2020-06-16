@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\Produto;
+use App\Favorito;
 use App\Categoria;
 use App\ProdutoFoto;
 use Illuminate\Http\Request;
@@ -29,38 +30,86 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {   
+    {
 
-        $produtos = $this->produto->limit(8)->orderBy('id', 'desc')->get();
+        $produtos = $this->produto->limit(16)->orderBy('id', 'desc')->get();
         $categoria = new Categoria();
         $categorias = $categoria->all();
         return view('welcome', compact('produtos', 'categorias'));
     }
 
     public function produto($slug)
-    {   
+    {
         $produto = $this->produto->whereSlug($slug)->first();
         $comentariosRecentes = $produto->comentarios()->limit(5)->orderBy('id', 'desc')->get();
         $cliente = new Cliente();
-        return view('produto', compact('produto', 'comentariosRecentes', 'cliente'));
+        $favorito = new Favorito();
+        if(session()->has('cliente')){
+            $favorito = $favorito->where('produto', $produto->id)->where('cliente', session()->get('cliente')->id);
+            return view('produto', compact('produto', 'comentariosRecentes', 'cliente', 'favorito'));   
+        }else{
+            return view('produto', compact('produto', 'comentariosRecentes', 'cliente'));   
+        }
     }
 
-    public function exibirPorCategoria($categoria){
+    public function exibirPorCategoria($categoria)
+    {
         $produtos = $this->produto->where('categoria', $categoria)->get();
         $categoria = new Categoria();
         $categorias = $categoria->all();
         return view('welcome', compact('produtos', 'categorias'));
     }
 
-    public function buscaDeProdutos(Request $request){
+    public function buscaDeProdutos(Request $request)
+    {
 
         $dados = $request->all();
 
-        $produtos = $this->produto->where('nome', 'like', '%'.$dados['pesquisa_produt'].'%')->get();
+        $produtos = $this->produto->where('nome', 'like', '%' . $dados['pesquisa_produt'] . '%')->get();
         $categoria = new Categoria();
         $categorias = $categoria->all();
         return view('welcome', compact('produtos', 'categorias'));
-
     }
 
+    public function incrementarQuantidadeVendidaProduto()
+    {
+        $produtos = session()->get('carrinho');
+
+        foreach ($produtos as $produto) {
+            $this->produto = $this->produto->whereSlug($produto['slug'])->first();
+            $avaliacao = (1 * $produto['quantidade']) + $this->produto->avaliacao;
+            $this->produto->where('slug', $produto['slug'])->update(['avaliacao' => $avaliacao]);
+        }
+
+        session()->forget('carrinho');
+
+        return;
+    }
+
+    public function exibicaoProdutosMaisVendidos()
+    {
+        $produtos = $this->produto->limit(8)->orderBy('avaliacao', 'desc')->get();
+
+        $categoria = new Categoria();
+        $categorias = $categoria->all();
+        return view('welcome', compact('produtos', 'categorias'));
+    }
+
+    public function favoritos()
+    {
+
+        if(!session()->has('cliente')){
+            return redirect()->back();
+        }
+            $favorito = new Favorito();
+            $cliente = new Cliente();
+            $cliente=$cliente->find(session()->get('cliente')->id);
+            $produtos = $cliente->favoritos()->get();
+    
+            $categoria = new Categoria();
+            $categorias = $categoria->all();
+            return view('welcome', compact('produtos', 'categorias'));
+        
+
+    }
 }

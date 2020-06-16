@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\Produto;
+use App\Favorito;
 use App\ClienteFoto;
+use App\HistoricoCompra;
 use App\Traits\ProdutoTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Requests\ClienteRequest;
-use App\Http\Requests\AtualizacaoClienteRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\AtualizacaoClienteRequest;
 
+date_default_timezone_set('America/Sao_Paulo');
 class ClienteController extends Controller
 {
     use ProdutoTrait;
@@ -79,7 +83,7 @@ class ClienteController extends Controller
     {
         $this->cliente = $this->cliente->find(session()->get('cliente')->id);
         $dados = $request->all();
-        if($this->verificaDuplicidadeEmail($this->cliente->email, $dados['email'])==false){
+        if ($this->verificaDuplicidadeEmail($this->cliente->email, $dados['email']) == false) {
             return redirect()->back()->with('erro', 'Email em uso');
         }
 
@@ -87,12 +91,12 @@ class ClienteController extends Controller
         $confsenhaAtual = $dados['senhaAtual'];
         $senhaAtual = $this->cliente->senha;
 
-        if($senhaNova==""){
+        if ($senhaNova == "") {
             $senhaNova = $senhaAtual;
             $this->cliente->senha = $senhaNova;
-        }else{
+        } else {
             $this->cliente->senha = password_hash($senhaNova, PASSWORD_DEFAULT);
-            if(strlen($senhaNova)<8){
+            if (strlen($senhaNova) < 8) {
                 return redirect()->back()->with('erro', 'Senha muito curta');
             }
         }
@@ -108,7 +112,7 @@ class ClienteController extends Controller
             if ($request->hasFile('fotoCliente')) {
                 $file = $request->file('fotoCliente');
 
-                if(isset(session()->get('cliente')->path)){
+                if (isset(session()->get('cliente')->path)) {
                     $this->removerFoto($this->cliente);
                 }
 
@@ -127,8 +131,12 @@ class ClienteController extends Controller
 
     public function login(Request $request)
     {
+        if (auth()->check()) {
+            return redirect()->back();
+        }
+
         if (session()->has('cliente')) {
-            return redirect()->route('home');
+            return redirect()->back();
         } else {
             return view('clientes.login');
         }
@@ -154,11 +162,11 @@ class ClienteController extends Controller
 
 
             $login['success'] = true;
-            if(session()->get('carrinho')){
-                $login['carrinho']=true;
-               }else{
-                   $login['carrinho']=false;
-               }
+            if (session()->get('carrinho')) {
+                $login['carrinho'] = true;
+            } else {
+                $login['carrinho'] = false;
+            }
             echo json_encode($login);
 
             return;
@@ -189,18 +197,57 @@ class ClienteController extends Controller
         return redirect()->back();
     }
 
-    public function verificaDuplicidadeEmail($emailAtual, $emailNovo){
+    public function verificaDuplicidadeEmail($emailAtual, $emailNovo)
+    {
         $cliente = new Cliente();
-        $cliente = $this->cliente->where('email',$emailNovo);
+        $cliente = $this->cliente->where('email', $emailNovo);
 
-        if($cliente->count()){
-            if($cliente->first()->email !=$emailAtual){
+        if ($cliente->count()) {
+            if ($cliente->first()->email != $emailAtual) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }else{
+        } else {
             return true;
         }
+    }
+
+    public function favoritar(Request $request, $id)
+    {
+        $favorito = new Favorito();
+        $this->produto = $this->produto->find($id);
+        $cliente = session()->get('cliente');
+
+        $favoritoJaExiste = $favorito->where('produto', $this->produto->id)->where('cliente', $cliente->id)->first();
+
+        if (isset($favoritoJaExiste)) {
+        } else {
+            $favorito->produto = $this->produto->id;
+            $favorito->cliente = $cliente->id;
+            $favorito->save();
+        }
+
+
+        $favoritar['success'] = true;
+
+        echo json_encode($favoritar);
+
+        return;
+    }
+
+    public function removerFavorito($id)
+    {
+
+        if (!session()->has('cliente')) {
+            return redirect()->back();
+        }
+
+        $favorito = new Favorito();
+        $cliente = session()->get('cliente');
+        $favorito = $favorito->where('produto', $id)->where('cliente', $cliente->id)->first();
+        $favorito->delete($favorito);
+
+        return redirect()->route('favoritos');
     }
 }

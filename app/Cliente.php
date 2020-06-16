@@ -30,8 +30,9 @@ class Cliente extends Model
         return $this->hasMany(Comentario::class, 'cliente', 'id');
     }
 
-    public function pedidos()
+    public function favoritos()
     {
-        return $this->hasMany(ClientePedido::class, 'cliente', 'id');
+        return $this->belongsToMany(Produto::class, 'favoritos', 'cliente', 'produto');
     }
+
 }

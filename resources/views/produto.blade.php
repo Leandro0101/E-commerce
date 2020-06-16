@@ -17,6 +17,7 @@
       <div class="row no-gutters">
         <div class="col-md-5">
           {{-- Se existir uma contagem de endereços de fotos, significa que a foto existe! --}}
+
           @if($produto->fotos->count())
           {{-- A foto princpal do Card recebe o primeiro valor do collection de fotos --}}
             <img src="{{ asset('storage/'.$produto->fotos->first()->path) }}" class="img-fluid" alt="...">
@@ -60,15 +61,43 @@
             <h3 class="card-title mt-5">R$ {{ number_format($produto->preco, 2, ',', '.') }}</h3>
             <hr>
             <label for="">Quantidade</label>
+           
+
             <div class="form-group">
               <form action="{{ route('carrinho.adicionar') }}" method="post">
                 @csrf
-                <input type="hidden" name="produto[nome]" value="{{ $produto->nome }}">
+                <input type="hidden" name="produto[nome]" value="{{ $produto->nome }}"> 
                 <input type="hidden" name="produto[preco]" value="{{ $produto->preco }}">
                 <input type="hidden" name="produto[slug]" value="{{ $produto->slug }}">
                 <input type="number" name="produto[quantidade]" value="1">
+                @guest
                 <button type="submit" class="btn btn-outline-info mt-4">Adicionar à sacola</button>
+                @else
+                <h5>Apenas clientes podem adicionar itens ao carrinho</h5>
+                @endguest
+
+                
+
               </form>
+              @if(!isset($favorito) || !$favorito->count())
+              @if(session()->has('cliente'))
+              <form name="form_favorito" class="formFavorito">
+                @csrf
+                <button type="submit"><i class="fas fa-crown">favoritar</i></button>
+              </form>
+              @endif
+              @else
+              <p>
+                <a class="btn btn-primary ml-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                  <i class="fas fa-crown">Meu favorito</i>    
+                </a>
+              </p>
+                  <form action="{{ route('cliente.removerFavorito', ['id'=>$produto->id]) }}" method="POST"  class="collapse" id="collapseExample">
+                    @method('delete')
+                    @csrf
+                    <button type="submit" class="btn btn-danger ml-3 btn-sm" style="font-size: 13px;"><i class="fas fa-minus-circle">Remover favorito</i></button>
+                  </form>  
+              @endif    
             </div>
           </div>
         </div>
@@ -179,6 +208,30 @@
 @section('scripts')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+{{-- <script src="{{ asset('assets/js/favoritos.js') }}"></script> --}}
+
+
+<script>
+  $(function(){
+    $('form[name="form_favorito"').submit(function(event){
+        event.preventDefault();
+        
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("cliente.favoritar", ["id" => $produto->id]) }}',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response){
+              $('.formFavorito').addClass('d-none');
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    })
+});
+</script>
+
 
 <script>
   $(function () {
