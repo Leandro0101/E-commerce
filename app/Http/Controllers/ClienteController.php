@@ -13,6 +13,8 @@ use Illuminate\Support\Carbon;
 use App\Http\Requests\ClienteRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AtualizacaoClienteRequest;
+use App\Mail\ClienteRegistroEmail;
+use Illuminate\Support\Facades\Mail;
 
 date_default_timezone_set('America/Sao_Paulo');
 class ClienteController extends Controller
@@ -51,6 +53,11 @@ class ClienteController extends Controller
             $clienteFoto->cliente = $this->cliente->id;
             $clienteFoto->save();
         }
+
+        // $cliente = new CLiente();
+        // $cliente = $cliente->find(1);
+
+        // Mail::to('vitorlucasdesenalima@gmail.com')->send(new ClienteRegistroEmail($cliente));
 
         $produtos = $this->produtos($this->produto);
 
