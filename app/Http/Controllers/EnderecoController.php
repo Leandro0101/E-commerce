@@ -121,7 +121,7 @@ class EnderecoController extends Controller
 
         $endereco->update($dados);
 
-        toastr()->warning('My name is Inigo Montoya. You killed my father, prepare to die!');
+        // toastr()->warning('My name is Inigo Montoya. You killed my father, prepare to die!');
 
         return redirect()->route('home');
 
