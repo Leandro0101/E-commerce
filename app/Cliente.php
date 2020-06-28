@@ -35,4 +35,9 @@ class Cliente extends Model
         return $this->belongsToMany(Produto::class, 'favoritos', 'cliente', 'produto');
     }
 
+    public function endereco()
+    {
+        return $this->hasOne(Endereco::class, 'cliente', 'id');
+    }
+
 }

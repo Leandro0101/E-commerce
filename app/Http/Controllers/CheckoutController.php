@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
+use App\State;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\admin\ProdutoController;
@@ -10,7 +12,7 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        // session()->forget('pagseguro_session_code');
+        session()->forget('pagseguro_session_code');
 
         if (!session()->has('cliente')) {
             return redirect()->route('cliente.login');
@@ -24,7 +26,11 @@ class CheckoutController extends Controller
 
         $cartItems = array_sum($cartItems);
 
-        return view('checkout', compact('cartItems'));
+        $state = new State();
+
+        $states = $state->all();
+        
+        return view('checkout', compact('cartItems', 'states'));
     }
 
     public function proccess(Request $request)
@@ -58,7 +64,7 @@ class CheckoutController extends Controller
 
         // Set your customer information.
         // If you using SANDBOX you must use an email @sandbox.pagseguro.com.br
-        $creditCard->setSender()->setName('João Comprador');
+        $creditCard->setSender()->setName(session()->get('cliente')->nome);
         $creditCard->setSender()->setEmail('teste@sandbox.pagseguro.com.br');
 
         $creditCard->setSender()->setPhone()->withParameters(
@@ -77,14 +83,14 @@ class CheckoutController extends Controller
 
         // Set shipping information for this payment request
         $creditCard->setShipping()->setAddress()->withParameters(
-            'Av. Brig. Faria Lima',
-            '1384',
-            'Jardim Paulistano',
-            '01452002',
-            'São Paulo',
-            'SP',
+            $dataPost['endereco'],
+            $dataPost['numero'],
+            $dataPost['bairro'],
+            $dataPost['cep'],
+            $dataPost['cidade'],
+            $dataPost['estado'],
             'BRA',
-            'apto. 114'
+            $dataPost['complemento']
         );
 
         //Set billing information for credit card
@@ -109,7 +115,7 @@ class CheckoutController extends Controller
 
         // Set the credit card holder information
         $creditCard->setHolder()->setBirthdate('01/10/1979');
-        $creditCard->setHolder()->setName('João Comprador'); // Equals in Credit Card
+        $creditCard->setHolder()->setName(session()->get('cliente')->nome); // Equals in Credit Card
 
         $creditCard->setHolder()->setPhone()->withParameters(
             11,
@@ -144,4 +150,24 @@ class CheckoutController extends Controller
             session()->put('pagseguro_session_code', $sessionCode->getResult());
         }
     }
+
+    public function cidadesPorEstados(Request $request){
+        $dados = $request->all();
+        $abbreviation = $dados['estado'];
+        $estado = new State();
+        $estado = $estado->where('abbreviation', $abbreviation)->first();
+        $cidade = new City();
+        $cidades = $estado->cities()->get();
+
+        $response['success'] = true;
+        $response['id'] = $estado;
+        $response['cidades'] = $cidades;
+
+        echo json_encode($response);
+
+        return;
+
+        
+    }
+    
 }

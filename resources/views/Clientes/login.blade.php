@@ -1,22 +1,36 @@
 @extends('layouts.index')
 @section('content')
-<div class="form col-4">
-  
+  <div class="form">
     <div class="alert alert-danger d-none messageBox" role="alert">
-     
+  </div>
+  <div class="container">
+      <div class="row pt-5 mt-3 justify-content-center align-items-center">
+          <div class="col-md-8">
+              <div class="card">
+                <div class="card-body">
+                  <form id="login-form" class="form-group p-3" name="formLogin" action="" method="post">
+                      <h3 class="card-header text-center text-dark">Login</h3>
+                      <div class="form-group mt-3">
+                          <label for="email" class="text-dark">Email:</label><br>
+                          <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="E-mail" id="email">
+                      </div>
+                      <div class="form-group">
+                          <label for="password" class="text-dark">Senha:</label><br>
+                          <input type="password" name="senha" id="password" class="form-control" placeholder="Senha">
+                      </div>
+                      <div class="form-group">
+                          <label for="remember-me" class="text-dark"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+                          <input type="submit" name="submit" class="btn bg-light btn-md" value="Entrar">
+                      </div>
+                      <div id="register-link" class="text-right">
+                          <a href="#" class="text-dark">Register here</a>
+                      </div>
+                  </form>
+                </div>  
+              </div>
+          </div>
       </div>
-<form class="mt-3" name="formLogin">
-    <div class="form-group">
-      <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="e-mail" id="email">
-    </div>
-    <div class="form-group">
-      <input type="password" class="form-control" name="senha" placeholder="senha">
-    </div>
-    <button type="submit" class="btn btn-primary">Entrar</button>
-  
-</form>
-</div>
-
+  </div>
 @endsection
 
 @section('scripts')
@@ -32,13 +46,8 @@
           data: $(this).serialize(),
           dataType: 'json',
           success: function(response){
-            if(response.success === true){              
-              if(response.carrinho===true){
-                window.location.href = "{{ route('checkout.index') }}";  
-              }else{
-                window.location.href = "{{ route('home') }}";
-              }
-              
+            if(response.success === true){
+              window.location.href = "{{ route('home') }}";
             }else{
               $('.messageBox').removeClass('d-none').html(response.message);
             }

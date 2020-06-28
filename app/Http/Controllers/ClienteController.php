@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\State;
 use App\Cliente;
 use App\Produto;
+use App\Endereco;
 use App\Favorito;
 use App\ClienteFoto;
 use App\HistoricoCompra;
 use App\Traits\ProdutoTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Http\Requests\ClienteRequest;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\AtualizacaoClienteRequest;
 use App\Mail\ClienteRegistroEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\ClienteRequest;
+use App\Http\Requests\EnderecoRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\AtualizacaoClienteRequest;
 
 date_default_timezone_set('America/Sao_Paulo');
 class ClienteController extends Controller
@@ -35,7 +38,11 @@ class ClienteController extends Controller
 
     public function criar()
     {
-        return view('clientes.create');
+        $state = new State();
+
+        $states = $state->all();
+
+        return view('clientes.create', compact('states'));
     }
 
     public function store(ClienteRequest $request)
@@ -57,11 +64,9 @@ class ClienteController extends Controller
         // $cliente = new CLiente();
         // $cliente = $cliente->find(1);
 
-        // Mail::to('vitorlucasdesenalima@gmail.com')->send(new ClienteRegistroEmail($cliente));
-
-        $produtos = $this->produtos($this->produto);
-
-        return view('welcome', compact('produtos'));
+        // Mail::to('vanescadasilva00@gmail.com')->send(new ClienteRegistroEmail($cliente));
+        session()->put('cliente', $this->cliente);
+        return redirect()->route('endereco.create');
     }
     public function criarCliente($request, $cliente)
     {
@@ -69,6 +74,7 @@ class ClienteController extends Controller
 
         $cliente->nome  = $dados['nome'];
         $cliente->email = $dados['email'];
+        $cliente->cpf = $dados['cpf'];
         $cliente->senha = password_hash($dados['senha'], PASSWORD_DEFAULT);
 
         return $cliente;
@@ -177,8 +183,6 @@ class ClienteController extends Controller
             echo json_encode($login);
 
             return;
-
-            //return redirect()->route('home');
 
         }
     }

@@ -8,7 +8,7 @@ use App\Favorito;
 use App\Categoria;
 use App\ProdutoFoto;
 use Illuminate\Http\Request;
-
+date_default_timezone_set('America/Sao_Paulo');
 class HomeController extends Controller
 {
     /**
@@ -33,9 +33,10 @@ class HomeController extends Controller
     {
 
         $produtos = $this->produto->limit(16)->orderBy('id', 'desc')->get();
+        $produtosMaisVendidos = $this->produto->limit(8)->orderBy('avaliacao', 'desc')->get();
         $categoria = new Categoria();
         $categorias = $categoria->all();
-        return view('welcome', compact('produtos', 'categorias'));
+        return view('welcome', compact('produtos', 'categorias', 'produtosMaisVendidos'));
     }
 
     public function produto($slug)
@@ -44,11 +45,13 @@ class HomeController extends Controller
         $comentariosRecentes = $produto->comentarios()->limit(5)->orderBy('id', 'desc')->get();
         $cliente = new Cliente();
         $favorito = new Favorito();
+        $categoria = new Categoria();
+        $categorias = $categoria->all();
         if(session()->has('cliente')){
             $favorito = $favorito->where('produto', $produto->id)->where('cliente', session()->get('cliente')->id);
-            return view('produto', compact('produto', 'comentariosRecentes', 'cliente', 'favorito'));   
+            return view('produto', compact('produto', 'comentariosRecentes', 'cliente', 'favorito', 'categorias'));   
         }else{
-            return view('produto', compact('produto', 'comentariosRecentes', 'cliente'));   
+            return view('produto', compact('produto', 'comentariosRecentes', 'cliente', 'categorias'));   
         }
     }
 
@@ -111,5 +114,14 @@ class HomeController extends Controller
             return view('welcome', compact('produtos', 'categorias'));
         
 
+    }
+
+    public function reduzirDescricao($descricao){
+        if(strlen($descricao)>85){
+             echo substr($descricao, 0, 85)."...";
+        }else{
+            echo $descricao;
+        }
+        return ;
     }
 }

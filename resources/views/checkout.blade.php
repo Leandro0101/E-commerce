@@ -3,58 +3,125 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 @endsection
 @section('content')
+<a class="cidadeAtual"></a>
     <div class="container">
-        <div class="col-md-6">
+        <div class="alert alert-danger d-none messageBox" role="alert"></div>
+        <div class="row">
+        <div class="col-md-4">
             <div class="row">
                 <div class="col-md-12">
                     <h5>Dados para pagamento</h5>
                 </div>
             </div>
-            <hr>
+            
             
             <form action="" method="post">
 
                 <div class="row">
-                    <div class="col-md-10 form-group">
+                    <div class="col-md-8 form-group">
+                        <hr>
                         <label>Nome no cartão</label>
                         <input type="text" class="form-control" name="card_name">
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-10 form-group">
+                    <div class="col-md-8 form-group">
                         <label>Número do cartão</label>
                         <span class="brand"></span>
-                        <input type="text" class="form-control" name="card_number">
+                        <input type="text" class="form-control" name="card_number" id="card_number">
                         <input type="hidden" name="card_brand">
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-2 form-group">
+                    <div class="col-md-4 form-group">
                         <label>Mês de expiração</label>
-                        <input type="text" class="form-control" name="card_month">
+                        <input type="text" class="form-control" name="card_month" placeholder="ex: 05" id="mes">
                     </div>
 
-                    <div class="col-md-2 form-group">
+                    <div class="col-md-4 form-group">
                         <label>Ano de expiração</label>
-                        <input type="text" class="form-control" name="card_year">
+                        <input type="text" class="form-control" name="card_year" placeholder="ex: 2050" id="ano">
                     </div>
 
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-8 form-group">
                         <label>Código de segurança</label>
                         <input type="text" class="form-control" name="card_cvv">
                     </div>
-                    
-                    <div class="col-md-12 installments form-group"></div>
+
+                        <div class="col-md-8 form-group installments"></div>
 
                 </div>
+            
+        </div>
 
-                <button class="btn btn-success btn-ms processCheckout">Efetuar pagamento</button>
-            </form>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Dados</h5>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label>Estado</label>
+                    <select name="estado" id="estados" class="form-control">
+                        <option></option>    
+                        @foreach ($states as $state)
+                            <option name="" value="{{ $state->abbreviation }}">{{ $state->name }}</option>    
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <div class="cidades">
+                        <div class="alert alert-info d-none carregando" role="alert">
+                            Carregando...
+                          </div>
+                    </div>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Bairro</label>
+                    <input type="text" name="bairro" class="form-control" value="{{ session()->get('cliente')->endereco()->first()->bairro }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 form-group">
+                    <label>Endereço</label>
+                    <input type="text" class="form-control" name="endereco" value="{{ session()->get('cliente')->endereco()->first()->endereco }}">
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Número</label>
+                    <input type="text" class="form-control" name="numero" id="numero" value="{{ session()->get('cliente')->endereco()->first()->numero }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 form-group">
+                    <label>Complemento</label>
+                    <input type="text" class="form-control" name="complemento" value="{{ session()->get('cliente')->endereco()->first()->complemento }}">
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>CEP</label>
+                    <input type="text" class="form-control" name="cep" id="cep" value="{{ session()->get('cliente')->endereco()->first()->cep }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 form-group">
+                    <label>CPF</label>
+                    <input type="text" class="form-control" name="cpf" id="cpf" value="{{ session()->get('cliente')->cpf }}">
+                </div>
+                <div class="col-md-4 form-group">
+                    <label>Telefone</label>
+                    <input type="text" class="form-control" name="telefone" id="telefone">
+                </div>
+                <button class="btn btn-success btn-ms processCheckout mt-5 ml-3">Efetuar pagamento</button>
+            </div>
+        </div>
+    </form>
+
         </div>
     </div>
 @endsection
@@ -65,8 +132,16 @@
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
+    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
+    <script>
+        const sessionId = '{{session()->get('pagseguro_session_code')}}';
+        PagSeguroDirectPayment.setSessionId(sessionId);
+        const urlCidadesPorEstado = '{{route("checkout.cidadesPorEstados")}}';
+    </script>
+    <script src="{{ asset('assets/js/mascaras.js') }}"></script>
+    <script src="{{ asset('assets/js/cidades.js') }}"></script>    
     <script>
         toastr.options = {
             "closeButton": false,
@@ -85,8 +160,6 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        const sessionId = '{{session()->get('pagseguro_session_code')}}';
-        PagSeguroDirectPayment.setSessionId(sessionId);
     </script>
 
     <script>
@@ -141,6 +214,15 @@
                 card_token: token,
                 hash: PagSeguroDirectPayment.getSenderHash(),
                 installment: document.querySelector('select.select_installments').value,
+                estado: document.querySelector('select[name=estado]').value,
+                cidade: document.querySelector('select[name=cidade]').value,
+                bairro: document.querySelector('input[name=bairro]').value,
+                numero: document.querySelector('input[name=numero]').value,
+                complemento: document.querySelector('input[name=complemento]').value,
+                endereco: document.querySelector('input[name=endereco]').value,
+                cpf: document.querySelector('input[name=cpf]').value,
+                cep: document.querySelector('input[name=cep]').value,
+                telefone: document.querySelector('input[name=telefone]').value,
                 card_name: document.querySelector('input[name=card_name]').value,
                 _token: '{{csrf_token()}}'
             };
@@ -158,7 +240,7 @@
                     window.location.href = "{{ route('home') }}";
                 },
                 error: function(err){
-
+                    
                 }
             });
         }
@@ -185,7 +267,7 @@
         function drawSelectInstallments(installments) {
 		let select = '<label>Opções de Parcelamento:</label>';
 
-		select += '<select class="form-control select_installments">';
+		select += '<select class="form-control select_installments col">';
 
 		for(let l of installments) {
 		    select += `<option value="${l.quantity}|${l.installmentAmount}">${l.quantity}x de ${l.installmentAmount} - Total fica ${l.totalAmount}</option>`;

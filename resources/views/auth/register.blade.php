@@ -4,10 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @auth
             <div class="card">
+                
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
+              
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
@@ -71,6 +74,17 @@
                     </form>
                 </div>
             </div>
+            @endauth
+            @guest
+            <div class="row mt-5">
+                <div class="col-md-3">
+                    <img class="ml-5" src="{{ asset('assets/img/garotoPensando.svg') }}" alt="" width="150px">
+                </div>
+                <div class="col-md-9">
+                    <h5 class="mt-5"><strong>Hmmm...<br>Talvez você esteja procurando outra coisa.</strong></h5>
+                </div>
+            </div>        
+            @endguest
         </div>
     </div>
 </div>

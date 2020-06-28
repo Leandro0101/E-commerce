@@ -13,7 +13,7 @@ html{
 body {
     height: 100%;
     font-family: var(--roboto);
-    /* background-color: #333; */
+    /* background-color: #FFDEAD; */
  }
 @-moz-document url-prefix() {
   fieldset { display: table-cell; }
@@ -297,7 +297,7 @@ background: #707070;
   }
 
   .hem-search-input{
-  color: #b48f7d  !important;
+  /* color: #b48f7d  !important; */
   border: 0;
   outline: 0;
   background: none;
@@ -315,7 +315,7 @@ background: #707070;
   }
 
   .hem-barra-busqueda:hover > .hem-search-icon{
-  background:#b48f7d  !important;
+  background: #ffffff  !important;
   color: #343a40 !important;
   }
 
@@ -328,4 +328,16 @@ background: #707070;
   align-items: center;
   border-radius: 50%;
   color:white;
+  }
+
+  #logo-brand{
+    height:190px;
+    width: 190px;
+    position: absolute;
+    margin-top: -87px;
+    margin-left: -65px;
+  }
+  .descricao {
+    overflow: auto;
+    height: 150px;
   }

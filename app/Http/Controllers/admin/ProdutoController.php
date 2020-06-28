@@ -8,6 +8,7 @@ use App\ProdutoFoto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProdutoRequest;
+use App\Http\Requests\ProdutoUpdateRequest;
 
 class ProdutoController extends Controller
 {
@@ -83,9 +84,11 @@ class ProdutoController extends Controller
      */
     public function edit($id)
     {
+        $categoria = new Categoria();
         $produto = $this->produto->find($id);
+        $categorias = $categoria->all(['id', 'nome']);
 
-        return view('admin.produtos.edit', compact('produto'));
+        return view('admin.produtos.edit', compact('produto', 'categorias'));
     }
 
     /**
@@ -95,7 +98,7 @@ class ProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProdutoUpdateRequest $request, $id)
     {
         
         $data = $request->all();
@@ -105,6 +108,7 @@ class ProdutoController extends Controller
         $produtoAtualizado->quantidade = $data['quantidade'];
         $produtoAtualizado->preco = $data['preco'];
         $produtoAtualizado->descricao = $data['descricao'];
+        $produtoAtualizado->categoria = $data['categoria'];
         $produtoAtualizado->update($data);
 
         $this->produto = $produtoAtualizado;

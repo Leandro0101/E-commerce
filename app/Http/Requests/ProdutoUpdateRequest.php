@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProdutoRequest extends FormRequest
+class ProdutoUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,16 @@ class ProdutoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nome'      => 'required|unique:produtos,nome|max:40',
+            'nomeUp'      => 'required|max:40',
             'preco'     => 'required|numeric',
             'descricao' => 'required|max:300|min:85',
             'fotos.*'   => 'image|max: 2160',
-            'categoria' => 'required'
         ];
     }
 
     public function messages(){
         return [
-            'required' => 'O campo :attribute é obrigatório',
-            'unique'   => ':attribute já em uso',
+            'required' => 'Este campo é obrigatório',
             'image'    => 'Imagem inválida',
             'max'      => 'Este campo aceita no máximo :max caracteres',
             'min'      => 'Este campo aceita no mínimo :min caracteres',
@@ -43,4 +41,5 @@ class ProdutoRequest extends FormRequest
             'fotos.*.max'     => 'Imagem não suportada. Máximo: 2mb'
         ];
     }
+
 }

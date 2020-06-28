@@ -28,7 +28,8 @@ class ClienteRequest extends FormRequest
             'email'         => 'required|max:45|unique:clientes,email|email',
             'senha'         => 'required|min:8',
             'confSenha'     => 'same:senha',
-            'fotoCliente'   => 'image'
+            'fotoCliente'   => 'image',
+            'cpf'           => 'required'
         ];
     }
 

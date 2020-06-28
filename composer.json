@@ -17,7 +17,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "pagseguro/pagseguro-php-sdk": "^6.0",
-        "spatie/laravel-sluggable": "^2.2"
+        "spatie/laravel-sluggable": "^2.2",
+        "yoeunes/toastr": "^1.2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

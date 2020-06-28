@@ -40,6 +40,7 @@ Route::prefix('carrinho')->name('carrinho.')->group(function () {
 Route::prefix('checkout')->name('checkout.')->group(function(){
     Route::get('/', 'CheckoutController@index')->name('index');
     Route::post('/proccess', 'CheckoutController@proccess')->name('proccess');
+    Route::get('cidadesPorEstado', 'CheckoutController@cidadesPorEstados')->name('cidadesPorEstados');
 });
 
 
@@ -59,8 +60,15 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::get('atualizacaoEspecifica/{cliente}', 'ClienteController@atualizacaoEspecifica')->name('atualizacaoEspecifica');
     Route::post('favoritar/{id}', 'ClienteController@favoritar')->name('favoritar');
     Route::delete('removerFavorito/{id}', 'ClienteController@removerFavorito')->name('removerFavorito');
+    Route::get('formEndereco', 'ClienteController@formCriarEndereco')->name('formEndereco');
+    Route::post('criarEndereco', 'ClienteController@storeEndereco')->name('criarEndereco');
 });
 
+Route::resource('endereco', 'EnderecoController');
+
+
 Auth::routes();
+
+
 
 // Route::get('/home', 'HomeController@index')->name('home');

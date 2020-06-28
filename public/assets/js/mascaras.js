@@ -1,0 +1,8 @@
+$('#cpf').mask("000.000.000-00")
+$('#telefone').mask("(00) 0000-0000")
+$('#cep').mask('00000-000')
+$('#mes').mask('00')
+$('#ano').mask('0000')
+$('#card_number').mask('0000000000000000')
+$('#numero').mask('00000')
+$('#estado').mask('SS')
