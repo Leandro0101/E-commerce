@@ -16,6 +16,7 @@ use App\ClienteFoto;
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/4b5357eb64.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/sweetAlert.js') }}"></script>
      
     <!-- Css Stylesheet -->
     <link rel="stylesheet" href="{{URL::asset('assets/css/style.css')}}">
@@ -110,6 +111,7 @@ use App\ClienteFoto;
               </div>
             @endif
           </ul>
+
           @endguest
           {{-- Se houver a sessão do carrinho, ou seja, houver algum item no carrinho, o contador de itens irá incrementar a quantidade de itens no carrinho --}}
             @if(session()->has('carrinho'))

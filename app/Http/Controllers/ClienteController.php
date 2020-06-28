@@ -66,6 +66,7 @@ class ClienteController extends Controller
 
         // Mail::to('vanescadasilva00@gmail.com')->send(new ClienteRegistroEmail($cliente));
         session()->put('cliente', $this->cliente);
+        
         return redirect()->route('endereco.create');
     }
     public function criarCliente($request, $cliente)

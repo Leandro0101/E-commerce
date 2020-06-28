@@ -4,13 +4,14 @@
 @endsection
 @section('content')
 <a class="cidadeAtual"></a>
-    <div class="container">
+    <div class="container mt-5">
         <div class="alert alert-danger d-none messageBox" role="alert"></div>
         <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
                     <h5>Dados para pagamento</h5>
+                    <hr class="">
                 </div>
             </div>
             
@@ -18,24 +19,31 @@
             <form action="" method="post">
 
                 <div class="row">
-                    <div class="col-md-8 form-group">
-                        <hr>
+                    <div class="col-md-6 form-group">
                         <label>Nome no cartão</label>
-                        <input type="text" class="form-control" name="card_name">
+                        <input type="text" class="form-control" name="card_name" value="{{ session()->get('cliente')->nome }}">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>CPF - Titular</label>
+                        <input type="text" class="form-control" name="cpf" id="cpf" value="{{ session()->get('cliente')->cpf }}">
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-8 form-group">
+                    <div class="col-md-6 form-group">
                         <label>Número do cartão</label>
                         <span class="brand"></span>
                         <input type="text" class="form-control" name="card_number" id="card_number">
                         <input type="hidden" name="card_brand">
                     </div>
+                    <div class="col-md-4 form-group">
+                        <label>Nascimento - Titular</label>
+                        <input type="text" class="form-control" name="nascimento" id="nascimento">
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-6 form-group">
                         <label>Mês de expiração</label>
                         <input type="text" class="form-control" name="card_month" placeholder="ex: 05" id="mes">
                     </div>
@@ -48,9 +56,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-8 form-group">
+                    <div class="col-md-2 form-group">
+                        <label for="">Telefone</label>
+                        <input type="text" class="form-control" name="ddd" id="ddd" placeholder="DDD">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Telefone</label>
+                        <input type="text" class="form-control" name="telefone" id="telefone" placeholder="número">
+                    </div>
+                    <div class="col-md-4 form-group">
                         <label>Código de segurança</label>
-                        <input type="text" class="form-control" name="card_cvv">
+                        <input type="text" class="form-control" name="card_cvv" id="cvv">
                     </div>
 
                         <div class="col-md-8 form-group installments"></div>
@@ -59,10 +75,10 @@
             
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
-                    <h5>Dados</h5>
+                    <h5>Dados - Endereço da entrega</h5>
                     <hr>
                 </div>
             </div>
@@ -109,15 +125,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7 form-group">
-                    <label>CPF</label>
-                    <input type="text" class="form-control" name="cpf" id="cpf" value="{{ session()->get('cliente')->cpf }}">
-                </div>
-                <div class="col-md-4 form-group">
-                    <label>Telefone</label>
-                    <input type="text" class="form-control" name="telefone" id="telefone">
-                </div>
-                <button class="btn btn-success btn-ms processCheckout mt-5 ml-3">Efetuar pagamento</button>
+                <button class="btn btn-success btn-ms processCheckout mt-4 ml-3">Efetuar pagamento</button>
+                <strong class="processando d-none">
+                    Processando...
+                </strong>
             </div>
         </div>
     </form>
@@ -210,6 +221,9 @@
 
         function processPayment(token)
         {
+            $('.processCheckout').addClass('d-none');
+            $('.processando').removeClass('d-none');
+
             let data = {
                 card_token: token,
                 hash: PagSeguroDirectPayment.getSenderHash(),
@@ -223,6 +237,8 @@
                 cpf: document.querySelector('input[name=cpf]').value,
                 cep: document.querySelector('input[name=cep]').value,
                 telefone: document.querySelector('input[name=telefone]').value,
+                ddd: document.querySelector('input[name=ddd]').value,
+                nascimento: document.querySelector('input[name=nascimento]').value,
                 card_name: document.querySelector('input[name=card_name]').value,
                 _token: '{{csrf_token()}}'
             };
@@ -236,8 +252,13 @@
                     
                 },
                 complete: function(res){
-                    toastr.success('Compra efetuado com sucesso!', 'E-BIJU agradece pela preferência!')
-                    window.location.href = "{{ route('home') }}";
+                Swal.fire({
+                icon: 'success',
+                title: 'E-BIJU',
+                text: 'Compra efetuado com sucesso!',
+                })
+        
+                // window.location.href = "{{ route('home') }}";
                 },
                 error: function(err){
                     

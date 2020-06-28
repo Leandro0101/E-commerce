@@ -64,7 +64,7 @@ class CheckoutController extends Controller
 
         // Set your customer information.
         // If you using SANDBOX you must use an email @sandbox.pagseguro.com.br
-        $creditCard->setSender()->setName(session()->get('cliente')->nome);
+        $creditCard->setSender()->setName($dataPost['card_name']);
         $creditCard->setSender()->setEmail('teste@sandbox.pagseguro.com.br');
 
         $creditCard->setSender()->setPhone()->withParameters(
@@ -95,14 +95,14 @@ class CheckoutController extends Controller
 
         //Set billing information for credit card
         $creditCard->setBilling()->setAddress()->withParameters(
-            'Av. Brig. Faria Lima',
-            '1384',
-            'Jardim Paulistano',
-            '01452002',
-            'São Paulo',
-            'SP',
+            session()->get('cliente')->endereco()->first()->endereco,
+            session()->get('cliente')->endereco()->first()->numero,
+            session()->get('cliente')->endereco()->first()->bairro,
+            session()->get('cliente')->endereco()->first()->cep,
+            session()->get('cliente')->endereco()->first()->cidade,
+            session()->get('cliente')->endereco()->first()->estado,
             'BRA',
-            'apto. 114'
+            session()->get('cliente')->endereco()->first()->complemento 
         );
 
         // Set credit card token
@@ -114,17 +114,17 @@ class CheckoutController extends Controller
         $creditCard->setInstallment()->withParameters($quantity, $installmentAmount);
 
         // Set the credit card holder information
-        $creditCard->setHolder()->setBirthdate('01/10/1979');
-        $creditCard->setHolder()->setName(session()->get('cliente')->nome); // Equals in Credit Card
+        $creditCard->setHolder()->setBirthdate($dataPost['nascimento']);
+        $creditCard->setHolder()->setName($dataPost['card_name']); // Equals in Credit Card
 
         $creditCard->setHolder()->setPhone()->withParameters(
-            11,
-            56273440
+            $dataPost['ddd'],
+            $dataPost['telefone']
         );
 
         $creditCard->setHolder()->setDocument()->withParameters(
             'CPF',
-            '74143014432'
+            $dataPost['cpf']
         );
 
         // Set the Payment Mode for this payment request

@@ -341,3 +341,8 @@ background: #707070;
     overflow: auto;
     height: 150px;
   }
+
+  .comentario {
+    overflow: auto;
+    height: 150px;
+  }

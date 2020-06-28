@@ -3,6 +3,9 @@
   $comentario = new Comentario();
 ?>
 @extends('layouts.index')
+@section('stylesheet')
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+@endsection
 @section('content')
 <div class="container">
 {{-- Se o cliente estiver logado no sistema, ele zerá armazenado em $cliente --}}
@@ -59,7 +62,7 @@
             <h4 class="card-title">{{ $produto->nome }}</h4>
 
             
-              <div class="descricao">
+            <div class="descricao">
               <p class="card-text text-muted ">{{ $produto->descricao }}</p>
             </div>
             
@@ -138,7 +141,7 @@
     </form>
     <hr>
     @foreach ($comentariosRecentes as $comentario)
-      <div class="toas" role="alert">
+      <div class="toas" role="alert" style="overflow: hidden;">
         <div class="toast-header">
           @if(isset($cliente->foto()->first()->path))
             @php
@@ -150,8 +153,9 @@
           @else
             <img src="{{ asset('assets/img/user_sem_foto.png') }}" class="rounded mr-2" alt="..." width="25">
           @endif
-          <strong class="mr-auto">{{ $cliente->nome }} <i class="far fa-comment-dots"></i></strong>
-          <small class="text-muted">{{ $comentario->created_at->format('d/m/Y') }}</small>
+        
+          <strong class="mr-auto" >{{ $cliente->nome }} <i class="far fa-comment-dots"></i></strong>
+          <small class="text-muted" ><p style="white-space: pre-line;">{{ $comentario->created_at->format('d/m/Y') }}</p></small>
           
         </div>
         <div class="toast-body">
@@ -192,9 +196,9 @@
                 <img src="{{ asset('assets/img/user_sem_foto.png') }}" class="rounded mr-2" alt="..." width="25">
               @endif
               <strong class="mr-auto">{{ $cliente->nome }} <i class="far fa-comment-dots"></i></strong>
-              <small class="text-muted">{{ $comentario->created_at->format('d/m/Y') }}</small>
+              <small class="text-muted" >{{ $comentario->created_at->format('d/m/Y') }}</small>
             </div>
-            <div class="toast-body">
+            <div class="toast-body" style="overflow: hidden;">
               {{ $comentario->texto }}
             </div>
           </div>
@@ -212,6 +216,31 @@
 @section('scripts')
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+<script
+src="https://code.jquery.com/jquery-2.2.4.min.js"
+integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+  toastr.options = {
+      "closeButton": false,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "3000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+  }
+</script>
 
 
 <script>
@@ -225,6 +254,7 @@
             data: $(this).serialize(),
             dataType: 'json',
             success: function(response){
+              toastr.info  ('Esse produto agora é um favorito', 'E-BIJU informa')
               $('.formFavorito').addClass('d-none');
             },
             error: function(error){
@@ -248,12 +278,9 @@
         dataType: 'json',
         success: function (response) {
           if (response.success == false) {
-            $('.messageError').removeClass('d-none').html(response.message);
-            $('.messageError').addClass('bg-danger').html(response.message);
+            toastr.error  (response.message, 'E-BIJU informa')
           } else {
-            $('.messageError').removeClass('bg-danger').html(response.message);
-            $('.messageError').removeClass('d-none').html(response.message);
-            $('.messageError').addClass('bg-success').html(response.message);
+            toastr.success  ('Obrigado pelo feedback!', 'E-BIJU informa')
             $('textarea#comentario').val(" ");
           }
         }
@@ -262,3 +289,4 @@
   });
 </script>
 @endsection
+

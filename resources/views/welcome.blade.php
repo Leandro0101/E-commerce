@@ -245,7 +245,7 @@ $ctrlHome = new HomeController();
   @php
       $cliente = session()->get('cliente');    
   @endphp
-  <div class="toast" style="position: absolute; top: 0; right: 0;" data-delay="4000">
+  {{-- <div class="toast" style="position: absolute; top: 0; right: 0;" data-delay="4000">
     <div class="toast-header">
       <img src="{{ asset('assets/img/logo.png') }}" class="rounded mr-2" alt="..." style="width: 60px;">
       <strong class="mr-auto">E-BIJU  </strong>
@@ -256,7 +256,7 @@ $ctrlHome = new HomeController();
     <div class="toast-body">
       Olá, {{ $cliente['nome'] }}, seja bem vindo!
     </div>
-  </div>
+  </div> --}}
 </div>
 @endif
 @endsection
