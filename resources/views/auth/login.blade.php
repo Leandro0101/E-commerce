@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    @if(!session()->has('cliente'))
     <div class="row justify-content-center mt-4">
         <div class="col-md-8">
             <div class="card">
@@ -69,5 +70,15 @@
             </div>
         </div>
     </div>
+    @else
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <img class="ml-5" src="{{ asset('assets/img/garotoPensando.svg') }}" alt="" width="150px">
+        </div>
+        <div class="col-md-9">
+            <h5 class="mt-5"><strong>Hmmm...<br>Talvez você esteja procurando outra coisa.</strong></h5>
+        </div>
+    </div>        
+    @endif
 </div>
 @endsection

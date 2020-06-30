@@ -95,7 +95,7 @@ $ctrlHome = new HomeController();
             <form action="{{ route('cliente.removerFavorito', ['id'=>$produto->id]) }}" method="POST">
               @method('delete')
               @csrf
-              <button type="submit" class="btn btn-danger ml-5 btn-sm">Remover dos meus favoritos</button>
+              <button type="submit" class="btn btn-danger btn-sm mt-2">Remover dos meus favoritos</button>
             </form>
             @endif
             @endif

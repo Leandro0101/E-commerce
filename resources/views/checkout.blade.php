@@ -144,7 +144,7 @@
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
   crossorigin="anonymous"></script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
     <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
     <script>
         const sessionId = '{{session()->get('pagseguro_session_code')}}';
@@ -153,25 +153,6 @@
     </script>
     <script src="{{ asset('assets/js/mascaras.js') }}"></script>
     <script src="{{ asset('assets/js/cidades.js') }}"></script>    
-    <script>
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": true,
-            "positionClass": "toast-top-left",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-    </script>
 
     <script>
         let amountTransaction = '{{$cartItems}}';
@@ -214,6 +195,15 @@
                     console.log(res);
                     processPayment(res.card.token)
                 },
+                error: function(err){
+
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'E-BIJU',
+                    text: 'Tivemos um problema no processamento do pagamento, verifique se todos seus dados conferem!',
+                    })
+                    
+                }
             });
         });
 
@@ -249,18 +239,23 @@
                 data: data,
                 dataType: 'json',
                 success: function(res){
-                    
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'E-BIJU',
+                    text: 'Compra efetuado com sucesso!',
+                    })
+            
+                    window.location.href = "{{ route('home') }}";                    
                 },
                 complete: function(res){
-                Swal.fire({
-                icon: 'success',
-                title: 'E-BIJU',
-                text: 'Compra efetuado com sucesso!',
-                })
-        
-                // window.location.href = "{{ route('home') }}";
+                    
                 },
                 error: function(err){
+                                        Swal.fire({
+                    icon: 'error',
+                    title: 'E-BIJU',
+                    text: 'Tivemos um problema no processamento do pagamento, verifique se todos seus dados conferem!',
+                    })
                     
                 }
             });

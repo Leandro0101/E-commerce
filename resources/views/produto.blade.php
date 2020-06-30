@@ -8,6 +8,11 @@
 @endsection
 @section('content')
 <div class="container">
+  @if($errors->count())
+    @foreach($errors as $error)
+      <div class="alert-warning">{{ $error }}</div>
+    @endforeach
+  @endif
 {{-- Se o cliente estiver logado no sistema, ele zerá armazenado em $cliente --}}
   @if(session()->has('cliente'))
     @php
@@ -81,7 +86,11 @@
 
 
                 @guest
-                <button type="submit" class="btn bg-light mt-3">Adicionar à sacola</button>
+                @if ($produto->quantidade == 0)
+                <img src="{{ asset('assets/img/estoquevazio.svg') }}" alt="" width="25px"><strong class="ml-2" style="font-size:18px;margin-top:17px;">Esgotado</strong>
+                @else
+                  <button type="submit" class="btn bg-light mt-3">Adicionar à sacola</button>    
+                @endif
                 @else
                 <h5>Apenas clientes podem adicionar itens ao carrinho</h5>
                 @endguest
@@ -100,7 +109,7 @@
               @endif
               @else
               <p>
-                <a class="btn btn-primary ml-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <a class="btn btn-light ml-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                   <i class="fas fa-crown">Meu favorito</i>    
                 </a>
               </p>
@@ -141,12 +150,14 @@
     </form>
     <hr>
     @foreach ($comentariosRecentes as $comentario)
+    @php
+        $id = $comentario->cliente;
+        $cliente = $cliente->find($id);   
+    @endphp
       <div class="toas" role="alert" style="overflow: hidden;">
         <div class="toast-header">
           @if(isset($cliente->foto()->first()->path))
             @php
-              $id = $comentario->cliente;
-              $cliente = $cliente->find($id);
               $foto = $cliente->foto()->first()->path;
             @endphp
             <img src="{{ asset('storage/'.$foto) }}" class="rounded mr-2" alt="..." width="25">

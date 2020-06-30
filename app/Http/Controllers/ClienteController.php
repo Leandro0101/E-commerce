@@ -60,12 +60,9 @@ class ClienteController extends Controller
             $clienteFoto->cliente = $this->cliente->id;
             $clienteFoto->save();
         }
-
-        // $cliente = new CLiente();
-        // $cliente = $cliente->find(1);
-
-        // Mail::to('vanescadasilva00@gmail.com')->send(new ClienteRegistroEmail($cliente));
         session()->put('cliente', $this->cliente);
+        $cliente = new CLiente();
+        Mail::to(session()->get('cliente')->email)->send(new ClienteRegistroEmail($cliente));
         
         return redirect()->route('endereco.create');
     }

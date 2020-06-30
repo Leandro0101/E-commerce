@@ -133,10 +133,16 @@ class CheckoutController extends Controller
             \PagSeguro\Configuration\Configure::getAccountCredentials()
         );
 
+        $response['success'] = true;
+
+        echo json_encode($response);
+
         $home_controll = new HomeController();
         $produto_controller = new ProdutoController();
         $produto_controller->descontarQtdEstoque();
         $home_controll->incrementarQuantidadeVendidaProduto();
+
+        return ;
     
     }
 
