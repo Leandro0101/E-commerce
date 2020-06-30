@@ -104,7 +104,7 @@
               @if(session()->has('cliente'))
               <form name="form_favorito" class="formFavorito">
                 @csrf
-                <button type="submit"><i class="fas fa-crown">favoritar</i></button>
+                <button type="submit" class="btn btn-light mt-3"><i class="fas fa-crown">favoritar</i></button>
               </form>
               @endif
               @else
@@ -194,13 +194,18 @@
           $todosComentario = $comentario->where('produto', $produto->id)->get();
         @endphp
         @foreach ($todosComentario as $comentario)
+        @php 
+          $id = $comentario->cliente;
+          $cliente = $cliente->find($id);
+        @endphp
           <div class="toas" role="alert">
             <div class="toast-header">
               @if(isset($cliente->foto()->first()->path))
                 @php
-                  $id = $comentario->cliente;
-                  $cliente = $cliente->find($id);
+                  
+        
                   $foto = $cliente->foto()->first()->path;
+                  
                 @endphp
                 <img src="{{ asset('storage/'.$foto) }}" class="rounded mr-2" alt="..." width="25">
               @else

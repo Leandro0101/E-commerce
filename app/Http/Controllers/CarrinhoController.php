@@ -32,21 +32,26 @@ class CarrinhoController extends Controller
             return redirect()->route('produto', ['slug' => $produto['slug']]);
         }
 
-        foreach (session()->get('carrinho') as $produto_carrinho) {
-            if ($produto_carrinho['slug'] == $produto['slug']) {
-                //Essa quantidade incrementada é a quantidade do produto q já está no carrinho somada com a quantidade
-                //que está sendo adicionada
-                $quantidade_incrementada = $produto_carrinho['quantidade'] + $produto['quantidade'];
-
-                if ($quantidade_incrementada > $produto_estoque->quantidade) {
-                    flash('Estoque insuficiente, máximo: ' . $produto_estoque->quantidade . ' itens')->warning();
-                    return redirect()->back();
-                }
-            }
-        }
-
 
         if (session()->has('carrinho')) {
+
+
+
+            $produtos_carrinho = session()->get('carrinho');
+
+            foreach ($produtos_carrinho as $produto_carrinho) {
+                if ($produto_carrinho['slug'] == $produto['slug']) {
+                    //Essa quantidade incrementada é a quantidade do produto q já está no carrinho somada com a quantidade
+                    //que está sendo adicionada
+                    $quantidade_incrementada = $produto_carrinho['quantidade'] + $produto['quantidade'];
+
+                    if ($quantidade_incrementada > $produto_estoque->quantidade) {
+                        flash('Estoque insuficiente, máximo: ' . $produto_estoque->quantidade . ' itens')->warning();
+                        return redirect()->back();
+                    }
+                }
+            }
+
 
             $produtos = session()->get('carrinho');
             $slugProdutos = array_column($produtos, 'slug');

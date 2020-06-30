@@ -61,24 +61,30 @@
               @enderror
             </div>
             {{-- Campo de colocar a foto do perfil --}}
-            <div class="row">
+            
               <label>Foto de perfil</label>
                 @if(isset(session()->get('cliente')->foto()->first()->path))
-                  <img src="{{ asset('storage/'.session()->get('cliente')->foto()->first()->path) }}" alt="" class="img-fluid mt-3"> <br>
-                  <a href="{{ route('cliente.removerFoto', ['cliente' => session()->get('cliente')]) }}" class="btn btn-sm btn-danger" title="Remover"><i class="fas fa-trash"></i> <span>Remover Foto</span></a>
+                <div class="row">
+                  <div class="col-2">
+                    <img src="{{ asset('storage/'.session()->get('cliente')->foto()->first()->path) }}" alt="" class="img-fluid mt-3" style="max-width: 100px;"> <br>                    
+                  </div>
+                  <div class="col-">
+                    <a href="{{ route('cliente.removerFoto', ['cliente' => session()->get('cliente')]) }}" class="btn btn-sm btn-danger mt-3" title="Remover"><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>                  
                 @else
                 <div class="alert alert-warning" role="alert">
                   Perfil sem foto
                 </div>
                 @endif
-                <input type="file" name="fotoCliente" class="form-control @error('fotoCliente') is-invalid @enderror" id="validationTooltip03">
+                <input type="file" name="fotoCliente" class="form-control mt-3 @error('fotoCliente') is-invalid @enderror" id="validationTooltip03">
                 @error('fotoCliente')
                 <div class="invalid-tooltip">
                   {{ $message }}
                 </div>
                 @enderror
-            </div>
-            <button type="submit" class="mt-3 btn bg-lg btn-warning" title="Alterar"><i class="fas fa-pen"></i> <span>Alterar Cliente</span></button>
+            
+            <button type="submit" class="mt-3 btn bg-lg btn-warning" title="Alterar"><i class="fas fa-pen"></i> <span>Salvar alterações</span></button>
           </form>
         </div>
       </div>

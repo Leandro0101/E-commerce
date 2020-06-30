@@ -20,7 +20,7 @@ $ctrlHome = new HomeController();
                 para o seu look! </h4>
               <p>Veio aqui pra conhecer a última moda em bijouterias e acessórios?<br>
                  Sinta-se em casa! Na página  você vai encontrar todas as bijuterias da moda.</p>
-              <a class="btn" href="#" style="background-color: black;" >Produtos</a> </div>
+              <a class="btn bg-light" href="#" >Produtos</a> </div>
             <div class="col-md-5 col-12 order-md-2 order-1"><img src="{{asset('assets/img/img-2.png')}}" class="mx-auto" alt="slide"></div>
           </div>
         </div>
@@ -35,7 +35,7 @@ $ctrlHome = new HomeController();
                 para o seu look! </h4>
               <p>Veio aqui pra conhecer a última moda em bijouterias e acessórios?<br>
                  Sinta-se em casa! Na página  você vai encontrar todas as bijuterias da moda.</p>
-                 <a class="btn" href="#" style="background-color: black;">Produtos</a> </div>
+                 <a class="btn bg-light" href="#">Produtos</a> </div>
             <div class="col-md-5 col-12 order-md-2 order-1"><img src="{{asset('assets/img/img-1.png')}}" class="mx-auto" alt="slide"></div>
           </div>
         </div>
@@ -50,7 +50,7 @@ $ctrlHome = new HomeController();
                 para o seu look! </h4>
               <p>Veio aqui pra conhecer a última moda em bijouterias e acessórios?<br>
                  Sinta-se em casa! Na página  você vai encontrar todas as bijuterias da moda.</p>
-              <a class="btn" href="#" style="background-color: black;" >Produtos</a> </div>
+              <a class="btn bg-light" href="#" >Produtos</a> </div>
             <div class="col-md-5 col-12 order-md-2 order-1"><img src="{{asset('assets/img/img-3.png')}}" class="mx-auto" alt="slide"></div>
           </div>
         </div>

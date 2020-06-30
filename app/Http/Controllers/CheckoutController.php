@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\City;
 use App\State;
 use Illuminate\Http\Request;
+use App\Mail\ClientePagamentoEmail;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\admin\ProdutoController;
 
@@ -141,7 +143,6 @@ class CheckoutController extends Controller
         $produto_controller = new ProdutoController();
         $produto_controller->descontarQtdEstoque();
         $home_controll->incrementarQuantidadeVendidaProduto();
-
         return ;
     
     }
