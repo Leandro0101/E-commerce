@@ -1,13 +1,13 @@
 # 🎥Pré-visualização
  <h1>
-    <img align="center" src="https://ik.imagekit.io/leandro0101/inicial_1Viduxp1I.png" width="650px">
-    <img align="center" src="https://ik.imagekit.io/leandro0101/single_produto_NGWH63PYn.png" width="650px">
+    <img align="center" src="https://ik.imagekit.io/leandro0101/inicial_1Viduxp1I.png" width="450px">
+    <img align="center" src="https://ik.imagekit.io/leandro0101/single_produto_NGWH63PYn.png" width="450px">
     <img align="center" src="https://ik.imagekit.io/leandro0101/pagamento_aA1P5HcwJ.png" width="650px">
-    <img align="center" src="https://ik.imagekit.io/leandro0101/pagamentoError__kQ1bdnYAl.png" width="650px">
+    <img align="center" src="https://ik.imagekit.io/leandro0101/pagamentoError__kQ1bdnYAl.png" width="450px">
 </h1>
 
 ## 📝Sobre
-Este e-commerce foi um projeto de conclusão de bimestre do curso técnico em Informática, cadeira de laboratório web, pela escola profissionalizante **E.E.E.P Professora Luiza de Teodoro Vieira**. Tem como principal objetivo o aprendizado de uma nova tecnologia - o **laravel**- e exercitar conhecimentos já adquiridos ao longo do ensino médio.
+#### Este e-commerce foi um projeto de conclusão de bimestre do curso técnico em Informática, cadeira de laboratório web, pela escola profissionalizante **E.E.E.P Professora Luiza de Teodoro Vieira**. Tem como principal objetivo o aprendizado de uma nova tecnologia - o **laravel**- e exercitar conhecimentos já adquiridos ao longo do ensino médio.
 ---
 ## Tecnologias utilizadas
 O projeto foi desenvolvido utilizando as seguintes tecnologias
